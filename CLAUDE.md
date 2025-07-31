@@ -249,6 +249,14 @@ Pre-commit checks:
 - Include placeholder data if seed file is missing
 - Auto-fix lint/type errors unless told otherwise
 
+## 🎯 IMPORTANT: Stay Focused
+
+- **STAY ON TASK**: Focus on what the user is asking for. Don't overcomplicate solutions.
+- **SIMPLEST SOLUTION FIRST**: Always choose the simplest working solution over complex architectures.
+- **LISTEN TO THE USER**: If the user says they already have something set up, work with their existing setup.
+- **DON'T WASTE TOKENS**: Avoid unnecessary research or exploration when the task is clear.
+- **COMPLETE THE TASK**: Focus on getting the user's immediate need working before suggesting improvements.
+
 ---
 
 ## 🐛 Common Errors & Solutions
