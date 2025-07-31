@@ -17,7 +17,7 @@ This error occurs because the redirect URI in your OAuth request doesn't match w
 
 ### 2. Navigate to OAuth Credentials
 1. Go to **APIs & Services** > **Credentials**
-2. Find your OAuth 2.0 Client ID: `244349194151-khaibf8483dthc7legeeplpvivegojg0.apps.googleusercontent.com`
+2. Find your OAuth 2.0 Client ID (check your .env file for the actual ID)
 3. Click on the client ID to edit it
 
 ### 3. Add Authorized Redirect URIs

@@ -22,7 +22,7 @@ pnpm dev
 4. Use the `render.yaml` file I created
 5. Add these sensitive environment variables:
    - `DATABASE_URL`: Get from Neon.tech (see below)
-   - `GOOGLE_CLIENT_SECRET`: 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
+   - `GOOGLE_CLIENT_SECRET`: [Your Google Client Secret from .env file]
    - `GOOGLE_CALLBACK_URL`: https://[your-app].onrender.com/auth/google/callback
 
 ### Option B: Manual Setup

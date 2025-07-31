@@ -56,3 +56,14 @@ temp/
 # Vercel
 .vercel
 VERCEL_ENV_VALUES.txt
+.env.deploy
+
+# Backend environment
+apps/backend/.env
+apps/backend/.env.local
+apps/backend/.env.production
+
+# Frontend environment  
+apps/frontend/.env
+apps/frontend/.env.local
+apps/frontend/.env.production
