@@ -15,7 +15,7 @@ handle_error() {
 trap 'handle_error $LINENO' ERR
 
 echo "📦 Installing dependencies..."
-pnpm install --shamefully-hoist --frozen-lockfile
+pnpm install --frozen-lockfile
 
 echo "🔨 Building shared package first..."
 pnpm --filter @solarops/shared build
