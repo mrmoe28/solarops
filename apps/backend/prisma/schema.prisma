@@ -39,6 +39,7 @@ model Project {
   solarDesign      SolarDesign?
   proposal         Proposal?
   agentTasks       AgentTask[]
+  projectEquipment ProjectEquipment[]
 }
 
 model PermitData {
@@ -114,6 +115,76 @@ model AgentTask {
   completedAt DateTime?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+}
+
+model EquipmentCategory {
+  id          String      @id @default(uuid())
+  name        String      @unique @db.VarChar(100)
+  description String?     @db.Text
+  equipment   Equipment[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  @@index([name])
+}
+
+model Equipment {
+  id               String             @id @default(uuid())
+  categoryId       String
+  category         EquipmentCategory  @relation(fields: [categoryId], references: [id])
+  manufacturer     String             @db.VarChar(200)
+  modelNumber      String             @db.VarChar(100)
+  name             String             @db.VarChar(300)
+  description      String?            @db.Text
+  specifications   Json?
+  imageUrl         String?            @db.VarChar(500)
+  standardPrice    Decimal            @db.Decimal(10, 2)
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  vendorPricing    VendorPricing[]
+  projectEquipment ProjectEquipment[]
+  
+  @@unique([manufacturer, modelNumber])
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([manufacturer, modelNumber])
+}
+
+model VendorPricing {
+  id           String    @id @default(uuid())
+  equipmentId  String
+  equipment    Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  vendorName   String    @db.VarChar(200)
+  specialPrice Decimal   @db.Decimal(10, 2)
+  validFrom    DateTime?
+  validUntil   DateTime?
+  notes        String?   @db.Text
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([equipmentId])
+  @@index([vendorName])
+  @@index([isActive])
+}
+
+model ProjectEquipment {
+  id          String    @id @default(uuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  quantity    Int
+  unitPrice   Decimal   @db.Decimal(10, 2)
+  totalPrice  Decimal   @db.Decimal(10, 2)
+  vendorUsed  String?   @db.VarChar(200)
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([projectId])
+  @@index([equipmentId])
 }
 
 enum ProjectStatus {
