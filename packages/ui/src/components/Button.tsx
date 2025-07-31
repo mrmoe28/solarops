@@ -9,31 +9,30 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', loading, disabled, children, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
-    
+    const baseStyles =
+      'inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+
     const variants = {
       primary: 'bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary',
-      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-visible:ring-secondary',
-      outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring',
+      secondary:
+        'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-visible:ring-secondary',
+      outline:
+        'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring',
       ghost: 'hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring',
-      destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive',
+      destructive:
+        'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive',
     };
-    
+
     const sizes = {
       sm: 'h-9 px-3 text-sm rounded-md',
       md: 'h-10 px-4 py-2 rounded-md',
       lg: 'h-11 px-8 rounded-md',
     };
-    
+
     return (
       <button
         ref={ref}
-        className={cn(
-          baseStyles,
-          variants[variant],
-          sizes[size],
-          className
-        )}
+        className={cn(baseStyles, variants[variant], sizes[size], className)}
         disabled={disabled || loading}
         {...props}
       >
@@ -66,7 +65,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = 'Button';

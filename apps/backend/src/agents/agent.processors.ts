@@ -132,32 +132,118 @@ export class OpenSolarProcessor {
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.IN_PROGRESS);
 
       // Get parcel data for additional input
-      await this.prisma.parcelData.findUnique({
+      const parcelData = await this.prisma.parcelData.findUnique({
         where: { projectId },
       });
 
-      // Mock implementation
-      const systemSize = 8.5; // kW
-      const panelCount = 22;
+      // Get equipment from database with vendor pricing
+      const solarPanel = await this.prisma.equipment.findFirst({
+        where: {
+          category: { name: 'Solar Panels' },
+          isActive: true,
+          manufacturer: 'REC',
+        },
+        include: {
+          category: true,
+          vendorPricing: {
+            where: { isActive: true },
+            orderBy: { specialPrice: 'asc' },
+            take: 1,
+          },
+        },
+      });
+
+      const inverter = await this.prisma.equipment.findFirst({
+        where: {
+          category: { name: 'Inverters' },
+          isActive: true,
+          manufacturer: 'Enphase',
+        },
+        include: {
+          category: true,
+          vendorPricing: {
+            where: { isActive: true },
+            orderBy: { specialPrice: 'asc' },
+            take: 1,
+          },
+        },
+      });
+
+      // Calculate system size based on roof area (mock calculation)
+      const systemSize = parcelData?.squareFootage ? Math.min(parcelData.squareFootage * 0.004, 15) : 8.5; // kW
+      const panelWattage = solarPanel?.specifications 
+        ? (solarPanel.specifications as any).power?.watts || 400 
+        : 400;
+      const panelCount = Math.ceil((systemSize * 1000) / panelWattage);
+
+      // Get best prices (vendor or standard)
+      const panelPrice = solarPanel?.vendorPricing?.[0]?.specialPrice 
+        ? Number(solarPanel.vendorPricing[0].specialPrice)
+        : solarPanel ? Number(solarPanel.standardPrice) : 280;
+      
+      const inverterPrice = inverter?.vendorPricing?.[0]?.specialPrice
+        ? Number(inverter.vendorPricing[0].specialPrice)
+        : inverter ? Number(inverter.standardPrice) : 145;
 
       const result = {
         systemSize,
         panelCount,
-        panelModel: 'REC Alpha Pure 400W',
-        inverterModel: 'Enphase IQ8A',
+        panelModel: solarPanel?.name || 'REC Alpha Pure 400W',
+        inverterModel: inverter?.name || 'Enphase IQ8A',
         annualProduction: systemSize * 1400,
         bomList: JSON.stringify({
-          panels: [{ name: 'REC Alpha Pure 400W', quantity: panelCount, unitPrice: 280 }],
-          inverters: [{ name: 'Enphase IQ8A', quantity: panelCount, unitPrice: 145 }],
+          panels: [{ 
+            name: solarPanel?.name || 'REC Alpha Pure 400W', 
+            quantity: panelCount, 
+            unitPrice: panelPrice,
+            vendorName: solarPanel?.vendorPricing?.[0]?.vendorName,
+            equipmentId: solarPanel?.id,
+          }],
+          inverters: [{ 
+            name: inverter?.name || 'Enphase IQ8A', 
+            quantity: panelCount, 
+            unitPrice: inverterPrice,
+            vendorName: inverter?.vendorPricing?.[0]?.vendorName,
+            equipmentId: inverter?.id,
+          }],
         }),
       };
 
-      await this.prisma.solarDesign.create({
+      const solarDesign = await this.prisma.solarDesign.create({
         data: {
           projectId,
           ...result,
         },
       });
+
+      // Create project equipment records if equipment was found
+      if (solarPanel || inverter) {
+        const projectEquipmentData = [];
+        
+        if (solarPanel) {
+          projectEquipmentData.push({
+            projectId,
+            equipmentId: solarPanel.id,
+            quantity: panelCount,
+            appliedPrice: panelPrice,
+            vendorName: solarPanel.vendorPricing?.[0]?.vendorName,
+          });
+        }
+        
+        if (inverter) {
+          projectEquipmentData.push({
+            projectId,
+            equipmentId: inverter.id,
+            quantity: panelCount,
+            appliedPrice: inverterPrice,
+            vendorName: inverter.vendorPricing?.[0]?.vendorName,
+          });
+        }
+
+        await this.prisma.projectEquipment.createMany({
+          data: projectEquipmentData,
+        });
+      }
 
       console.log(`[OpenSolarProcessor] Completed processing for task ${taskId}`);
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.COMPLETED, result);

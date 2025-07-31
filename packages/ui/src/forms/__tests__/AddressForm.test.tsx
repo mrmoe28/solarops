@@ -85,7 +85,7 @@ describe('AddressForm', () => {
 
       // Type 'C' to jump to California
       await user.keyboard('c');
-      
+
       await waitFor(() => {
         const californiaOption = screen.getByRole('option', { name: 'California' });
         expect(californiaOption).toHaveAttribute('data-highlighted', 'true');
@@ -93,7 +93,7 @@ describe('AddressForm', () => {
 
       // Type 'CO' to jump to Colorado
       await user.keyboard('o');
-      
+
       await waitFor(() => {
         const coloradoOption = screen.getByRole('option', { name: 'Colorado' });
         expect(coloradoOption).toHaveAttribute('data-highlighted', 'true');
@@ -169,12 +169,12 @@ describe('AddressForm', () => {
       await user.type(screen.getByLabelText('Project Name'), 'Solar Test Project');
       await user.type(screen.getByLabelText('Street Address'), '123 Solar Street');
       await user.type(screen.getByLabelText('City'), 'San Francisco');
-      
+
       // Select state
       const stateSelect = screen.getByRole('combobox', { name: /state/i });
       await user.click(stateSelect);
       await user.click(screen.getByRole('option', { name: 'California' }));
-      
+
       await user.type(screen.getByLabelText('ZIP Code'), '94105');
 
       // Submit form
@@ -198,7 +198,7 @@ describe('AddressForm', () => {
 
       const submitButton = screen.getByRole('button', { name: /start solar analysis/i });
       expect(submitButton).toBeDisabled();
-      
+
       await user.click(submitButton);
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -210,11 +210,11 @@ describe('AddressForm', () => {
       await user.type(screen.getByLabelText('Project Name'), '  Solar Project  ');
       await user.type(screen.getByLabelText('Street Address'), '  123 Main St  ');
       await user.type(screen.getByLabelText('City'), '  San Francisco  ');
-      
+
       const stateSelect = screen.getByRole('combobox', { name: /state/i });
       await user.click(stateSelect);
       await user.click(screen.getByRole('option', { name: 'California' }));
-      
+
       await user.type(screen.getByLabelText('ZIP Code'), '  94105  ');
 
       const submitButton = screen.getByRole('button', { name: /start solar analysis/i });
@@ -254,7 +254,10 @@ describe('AddressForm', () => {
         const nameInput = screen.getByLabelText('Project Name');
         const nameError = screen.getByText(/project name is required/i);
         expect(nameInput).toHaveAttribute('aria-invalid', 'true');
-        expect(nameInput).toHaveAttribute('aria-describedby', expect.stringContaining(nameError.id));
+        expect(nameInput).toHaveAttribute(
+          'aria-describedby',
+          expect.stringContaining(nameError.id),
+        );
       });
     });
   });

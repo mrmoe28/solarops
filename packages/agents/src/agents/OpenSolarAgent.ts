@@ -36,27 +36,33 @@ export class OpenSolarAgent extends BaseAgent {
       const panelCount = Math.ceil(systemSize / 0.4); // 400W panels
 
       const bomList: BillOfMaterials = {
-        panels: [{
-          name: 'REC Alpha Pure 400W',
-          quantity: panelCount,
-          unitPrice: 280,
-          totalPrice: panelCount * 280,
-          partNumber: 'REC400AA',
-        }],
-        inverters: [{
-          name: 'Enphase IQ8A Microinverter',
-          quantity: panelCount,
-          unitPrice: 145,
-          totalPrice: panelCount * 145,
-          partNumber: 'IQ8A-72-2-US',
-        }],
-        mounting: [{
-          name: 'IronRidge XR Rail Kit',
-          quantity: Math.ceil(panelCount / 4),
-          unitPrice: 120,
-          totalPrice: Math.ceil(panelCount / 4) * 120,
-          partNumber: 'XR-100-168B',
-        }],
+        panels: [
+          {
+            name: 'REC Alpha Pure 400W',
+            quantity: panelCount,
+            unitPrice: 280,
+            totalPrice: panelCount * 280,
+            partNumber: 'REC400AA',
+          },
+        ],
+        inverters: [
+          {
+            name: 'Enphase IQ8A Microinverter',
+            quantity: panelCount,
+            unitPrice: 145,
+            totalPrice: panelCount * 145,
+            partNumber: 'IQ8A-72-2-US',
+          },
+        ],
+        mounting: [
+          {
+            name: 'IronRidge XR Rail Kit',
+            quantity: Math.ceil(panelCount / 4),
+            unitPrice: 120,
+            totalPrice: Math.ceil(panelCount / 4) * 120,
+            partNumber: 'XR-100-168B',
+          },
+        ],
         electrical: [
           {
             name: 'AC Combiner Panel',

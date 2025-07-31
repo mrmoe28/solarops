@@ -52,3 +52,4 @@ temp/
 
 # Docker
 .docker/
+.vercel

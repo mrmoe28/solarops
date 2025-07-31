@@ -5,7 +5,10 @@ export const createProjectSchema = z.object({
   address: z.string().trim().min(1, 'Address is required'),
   city: z.string().trim().min(1, 'City is required'),
   state: z.string().length(2, 'State is required'),
-  zipCode: z.string().trim().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
+  zipCode: z
+    .string()
+    .trim()
+    .regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
 });
 
 export const updateProjectSchema = createProjectSchema.partial();

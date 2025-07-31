@@ -43,7 +43,9 @@ export function AddressForm({ onSubmit, defaultValues, loading = false }: Addres
           aria-describedby={errors.name ? 'name-error' : undefined}
         />
         {errors.name && (
-          <p id="name-error" className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+          <p id="name-error" className="mt-1 text-sm text-red-600">
+            {errors.name.message}
+          </p>
         )}
       </div>
 
@@ -58,7 +60,9 @@ export function AddressForm({ onSubmit, defaultValues, loading = false }: Addres
           aria-describedby={errors.address ? 'address-error' : undefined}
         />
         {errors.address && (
-          <p id="address-error" className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+          <p id="address-error" className="mt-1 text-sm text-red-600">
+            {errors.address.message}
+          </p>
         )}
       </div>
 
@@ -74,7 +78,9 @@ export function AddressForm({ onSubmit, defaultValues, loading = false }: Addres
             aria-describedby={errors.city ? 'city-error' : undefined}
           />
           {errors.city && (
-            <p id="city-error" className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+            <p id="city-error" className="mt-1 text-sm text-red-600">
+              {errors.city.message}
+            </p>
           )}
         </div>
 
@@ -95,9 +101,7 @@ export function AddressForm({ onSubmit, defaultValues, loading = false }: Addres
               ))}
             </SelectContent>
           </Select>
-          {errors.state && (
-            <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>
-          )}
+          {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>}
         </div>
 
         <div className="sm:col-span-1">
@@ -111,17 +115,14 @@ export function AddressForm({ onSubmit, defaultValues, loading = false }: Addres
             aria-describedby={errors.zipCode ? 'zipCode-error' : undefined}
           />
           {errors.zipCode && (
-            <p id="zipCode-error" className="mt-1 text-sm text-red-600">{errors.zipCode.message}</p>
+            <p id="zipCode-error" className="mt-1 text-sm text-red-600">
+              {errors.zipCode.message}
+            </p>
           )}
         </div>
       </div>
 
-      <Button
-        type="submit"
-        className="w-full"
-        loading={loading}
-        disabled={loading}
-      >
+      <Button type="submit" className="w-full" loading={loading} disabled={loading}>
         Start Solar Analysis
       </Button>
     </form>

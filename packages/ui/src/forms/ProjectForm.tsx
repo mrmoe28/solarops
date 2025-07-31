@@ -35,7 +35,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
           <h3 className="text-lg font-medium text-gray-900">{project.name}</h3>
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-              project.status
+              project.status,
             )}`}
           >
             {project.status}
@@ -61,9 +61,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
                 <div className="flex items-center">
                   <Battery className="h-8 w-8 text-blue-600" />
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">
-                      System Size
-                    </p>
+                    <p className="text-sm font-medium text-gray-900">System Size</p>
                     <p className="text-lg font-semibold text-blue-600">
                       {project.solarDesign.systemSize} kW
                     </p>
@@ -77,9 +75,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
                 <div className="flex items-center">
                   <FileText className="h-8 w-8 text-green-600" />
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">
-                      Estimated Savings
-                    </p>
+                    <p className="text-sm font-medium text-gray-900">Estimated Savings</p>
                     <p className="text-lg font-semibold text-green-600">
                       ${project.proposal.savings?.annual}/year
                     </p>

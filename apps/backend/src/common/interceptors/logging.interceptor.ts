@@ -28,7 +28,7 @@ export class LoggingInterceptor implements NestInterceptor {
       if (gqlContext.getInfo()) {
         return this.handleGraphQLRequest(context, next, start, correlationId);
       }
-    } catch (_error) {
+    } catch {
       // Not a GraphQL context, continue
     }
 

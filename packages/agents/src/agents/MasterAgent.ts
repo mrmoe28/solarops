@@ -22,7 +22,7 @@ export class MasterAgent extends EventEmitter {
     this.parcelAgent = new ParcelAgent(config);
     this.solarAgent = new OpenSolarAgent(config);
     this.proposalAgent = new ProposalAgent(config);
-    
+
     this.setupAgentListeners();
   }
 
@@ -42,14 +42,14 @@ export class MasterAgent extends EventEmitter {
 
       if (permitResult.success && permitResult.data) {
         results.permitData = permitResult.data as any;
-        this.emit('agentComplete', { 
-          agentType: AgentType.PERMIT_OFFICE, 
-          success: true 
+        this.emit('agentComplete', {
+          agentType: AgentType.PERMIT_OFFICE,
+          success: true,
         });
       } else {
-        this.emit('agentError', { 
-          agentType: AgentType.PERMIT_OFFICE, 
-          error: permitResult.error 
+        this.emit('agentError', {
+          agentType: AgentType.PERMIT_OFFICE,
+          error: permitResult.error,
         });
       }
 
@@ -64,14 +64,14 @@ export class MasterAgent extends EventEmitter {
 
       if (parcelResult.success && parcelResult.data) {
         results.parcelData = parcelResult.data as any;
-        this.emit('agentComplete', { 
-          agentType: AgentType.PARCEL_INFO, 
-          success: true 
+        this.emit('agentComplete', {
+          agentType: AgentType.PARCEL_INFO,
+          success: true,
         });
       } else {
-        this.emit('agentError', { 
-          agentType: AgentType.PARCEL_INFO, 
-          error: parcelResult.error 
+        this.emit('agentError', {
+          agentType: AgentType.PARCEL_INFO,
+          error: parcelResult.error,
         });
       }
 
@@ -86,14 +86,14 @@ export class MasterAgent extends EventEmitter {
 
       if (solarResult.success && solarResult.data) {
         results.solarDesign = solarResult.data as any;
-        this.emit('agentComplete', { 
-          agentType: AgentType.OPEN_SOLAR, 
-          success: true 
+        this.emit('agentComplete', {
+          agentType: AgentType.OPEN_SOLAR,
+          success: true,
         });
       } else {
-        this.emit('agentError', { 
-          agentType: AgentType.OPEN_SOLAR, 
-          error: solarResult.error 
+        this.emit('agentError', {
+          agentType: AgentType.OPEN_SOLAR,
+          error: solarResult.error,
         });
       }
 
@@ -105,14 +105,14 @@ export class MasterAgent extends EventEmitter {
 
       if (proposalResult.success && proposalResult.data) {
         results.proposal = proposalResult.data as any;
-        this.emit('agentComplete', { 
-          agentType: AgentType.PROPOSAL, 
-          success: true 
+        this.emit('agentComplete', {
+          agentType: AgentType.PROPOSAL,
+          success: true,
         });
       } else {
-        this.emit('agentError', { 
-          agentType: AgentType.PROPOSAL, 
-          error: proposalResult.error 
+        this.emit('agentError', {
+          agentType: AgentType.PROPOSAL,
+          error: proposalResult.error,
         });
       }
 
@@ -135,7 +135,7 @@ export class MasterAgent extends EventEmitter {
 
   private setupAgentListeners() {
     const agents = [this.permitAgent, this.parcelAgent, this.solarAgent, this.proposalAgent];
-    
+
     agents.forEach((agent) => {
       agent.on('progress', (data) => {
         this.emit('agentProgress', {

@@ -21,7 +21,7 @@ export class ParcelAgent extends BaseAgent {
       // In a real implementation, this would integrate with various
       // parcel data APIs or scrape county assessor websites
       this.updateProgress(30, 'Querying property databases...');
-      
+
       // Simulate API call delay
       await this.sleep(2000);
 

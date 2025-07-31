@@ -32,7 +32,7 @@ export class ProposalAgent extends BaseAgent {
         project.solarDesign,
         systemCost,
         electricityRate,
-        annualRateIncrease
+        annualRateIncrease,
       );
 
       this.updateProgress(80, 'Calculating payback period...');
@@ -65,7 +65,7 @@ export class ProposalAgent extends BaseAgent {
 
   private calculateMaterialCost(bomList: any): number {
     let total = 0;
-    
+
     for (const category of Object.values(bomList)) {
       if (Array.isArray(category)) {
         total += category.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -79,7 +79,7 @@ export class ProposalAgent extends BaseAgent {
     solarDesign: SolarDesign,
     systemCost: number,
     electricityRate: number,
-    annualRateIncrease: number
+    annualRateIncrease: number,
   ): { monthly: number; annual: number; lifetime: number } {
     const annualProduction = solarDesign.annualProduction || 0;
     const firstYearSavings = annualProduction * electricityRate;
@@ -87,10 +87,10 @@ export class ProposalAgent extends BaseAgent {
     // Calculate 25-year lifetime savings with rate increases
     let lifetimeSavings = 0;
     let currentRate = electricityRate;
-    
+
     for (let year = 0; year < 25; year++) {
       lifetimeSavings += annualProduction * currentRate * 0.995; // 0.5% annual degradation
-      currentRate *= (1 + annualRateIncrease / 100);
+      currentRate *= 1 + annualRateIncrease / 100;
     }
 
     return {
