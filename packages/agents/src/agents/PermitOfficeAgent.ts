@@ -99,7 +99,7 @@ export class PermitOfficeAgent extends BaseAgent {
     // Try to find application links
     const applicationLinks = await page.$$eval(
       'a:has-text("application"), a:has-text("apply")',
-      (elements) => elements.map((el) => el.href),
+      (elements) => elements.map((el) => (el as HTMLAnchorElement).href),
     );
 
     if (applicationLinks.length > 0) {
