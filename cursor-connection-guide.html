@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>How to Connect to Cursor Editor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #7f8c8d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 15px 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        pre code {
+            background-color: transparent;
+            color: #e2e8f0;
+            padding: 0;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .method-section {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .troubleshooting {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 40px 0;
+        }
+        @media print {
+            body {
+                padding: 20px;
+            }
+            pre {
+                background-color: #f4f4f4;
+                color: #333;
+                border: 1px solid #ddd;
+            }
+            pre code {
+                color: #333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>How to Connect to Cursor Editor</h1>
+    
+    <h2>Overview</h2>
+    <p>This guide explains how to open your Solar Ops project in the Cursor editor.</p>
+    
+    <div class="method-section">
+        <h2>Method 1: Using the Command Line</h2>
+        
+        <h3>Step 1: Open Terminal</h3>
+        <p>Navigate to your project directory:</p>
+        <pre><code>cd /Users/ekodevapps/Desktop/Solar\ Ops</code></pre>
+        
+        <h3>Step 2: Open in Cursor</h3>
+        <p>Run the following command:</p>
+        <pre><code>cursor .</code></pre>
+    </div>
+    
+    <div class="method-section">
+        <h2>Method 2: Using the Shell Script</h2>
+        
+        <h3>Step 1: Make the Script Executable</h3>
+        <p>First, ensure the <code>open-in-cursor.sh</code> script is executable:</p>
+        <pre><code>chmod +x open-in-cursor.sh</code></pre>
+        
+        <h3>Step 2: Run the Script</h3>
+        <p>Execute the script:</p>
+        <pre><code>./open-in-cursor.sh</code></pre>
+    </div>
+    
+    <div class="troubleshooting">
+        <h2>Troubleshooting</h2>
+        
+        <h3>If 'cursor' Command Not Found</h3>
+        <p>If you get a "command not found" error, you need to install the Cursor command in your PATH:</p>
+        
+        <ol>
+            <li>Open Cursor manually (from Applications)</li>
+            <li>Press <code>Cmd+Shift+P</code> to open Command Palette</li>
+            <li>Type "Install 'cursor' command in PATH"</li>
+            <li>Select and run the command</li>
+            <li>Restart your terminal</li>
+            <li>Try the <code>cursor .</code> command again</li>
+        </ol>
+    </div>
+    
+    <h2>What the Script Does</h2>
+    <p>The <code>open-in-cursor.sh</code> script is a simple bash script that:</p>
+    <ul>
+        <li>Executes the command <code>cursor .</code></li>
+        <li>Opens the current directory in Cursor editor</li>
+        <li>Provides a convenient way to launch Cursor from the project root</li>
+    </ul>
+    
+    <hr>
+    <p><em>Generated on: <script>document.write(new Date().toLocaleDateString());</script></em></p>
+</body>
+</html>

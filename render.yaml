@@ -2,7 +2,7 @@ services:
   - type: web
     name: solarops-backend
     runtime: node
-    repo: https://github.com/yourusername/solarops
+    repo: https://github.com/mrmoe28/solarops
     branch: main
     rootDir: apps/backend
     buildCommand: cd ../.. && pnpm install --no-frozen-lockfile && cd apps/backend && pnpm db:generate && pnpm build
@@ -23,7 +23,9 @@ services:
       - key: GOOGLE_CALLBACK_URL
         sync: false
       - key: FRONTEND_URL
-        value: https://solar-ops.vercel.app
+        value: https://solarops-28.vercel.app
+      - key: FRONTEND_CALLBACK_URL
+        value: https://solarops-28.vercel.app/auth/callback
       - key: OPENAI_API_KEY
         sync: false
       - key: NREL_API_KEY

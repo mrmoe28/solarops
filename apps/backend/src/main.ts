@@ -38,9 +38,39 @@ async function bootstrap() {
     }),
   );
 
+  // Configure CORS for multiple origins
+  const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://solarops-28.vercel.app',
+    'https://solar-ops.vercel.app',
+    'https://solar-*.vercel.app', // Allow any solar- subdomain on Vercel
+    'http://localhost:3000', // Local development
+  ].filter(Boolean);
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      
+      // Check if origin matches any allowed pattern
+      const isAllowed = allowedOrigins.some(allowed => {
+        if (allowed.includes('*')) {
+          // Handle wildcard patterns
+          const regex = new RegExp('^' + allowed.replace('*', '.*') + '$');
+          return regex.test(origin);
+        }
+        return allowed === origin;
+      });
+      
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   const port = process.env.PORT || 4000;
