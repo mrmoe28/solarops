@@ -24,8 +24,6 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toast": "^1.1.5",
     "@react-pdf/renderer": "^3.1.14",
-    "@solarops/shared": "workspace:*",
-    "@solarops/ui": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "graphql": "^16.8.1",

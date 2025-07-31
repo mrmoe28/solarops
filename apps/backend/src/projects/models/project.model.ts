@@ -168,4 +168,34 @@ export class Project {
 
   @Field(() => Proposal, { nullable: true })
   proposal?: Proposal;
+
+  @Field(() => [ProjectEquipment], { nullable: true })
+  projectEquipment?: ProjectEquipment[];
+}
+
+@ObjectType()
+export class ProjectEquipment {
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  projectId: string;
+
+  @Field()
+  equipmentId: string;
+
+  @Field()
+  quantity: number;
+
+  @Field(() => Number)
+  unitPrice: number;
+
+  @Field(() => Number)
+  totalPrice: number;
+
+  @Field({ nullable: true })
+  vendorUsed?: string;
+
+  @Field({ nullable: true })
+  notes?: string;
 }
