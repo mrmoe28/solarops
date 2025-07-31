@@ -1,14 +1,8 @@
 {
-  "buildCommand": "pnpm build:frontend",
+  "buildCommand": "pnpm build:packages && cd apps/frontend && pnpm build",
   "outputDirectory": "apps/frontend/.next",
-  "rootDirectory": ".",
-  "installCommand": "pnpm install --prod=false",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
-  "functions": {
-    "apps/frontend/src/app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",

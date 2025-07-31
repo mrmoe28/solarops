@@ -29,6 +29,19 @@ type AuthResponse {
   user: User!
 }
 
+input CreateEquipmentWithPricingInput {
+  categoryId: String!
+  description: String
+  imageUrl: String
+  isActive: Boolean
+  manufacturer: String!
+  modelNumber: String!
+  name: String!
+  specifications: String
+  standardPrice: Float!
+  vendorPricing: [CreateVendorPricingInput!]
+}
+
 input CreateProjectInput {
   address: String!
   city: String!
@@ -37,19 +50,80 @@ input CreateProjectInput {
   zipCode: String!
 }
 
+input CreateVendorPricingInput {
+  notes: String
+  specialPrice: Float!
+  validFrom: DateTime
+  validUntil: DateTime
+  vendorName: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+type Equipment {
+  category: EquipmentCategory!
+  categoryId: String!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  imageUrl: String
+  isActive: Boolean!
+  lowestVendorPrice: Float
+  manufacturer: String!
+  modelNumber: String!
+  name: String!
+  specifications: String
+  standardPrice: Float!
+  updatedAt: DateTime!
+  vendorPricing: [VendorPricing!]
+}
+
+type EquipmentCategory {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type EquipmentConnection {
+  items: [Equipment!]!
+  page: Float!
+  pageSize: Float!
+  total: Float!
+  totalPages: Float!
+}
+
+input EquipmentFilterInput {
+  categoryId: String
+  isActive: Boolean
+  limit: Int
+  manufacturer: String
+  page: Int
+  priceRange: PriceRangeInput
+  search: String
+  sortBy: String
+  sortOrder: String
+}
+
 type Mutation {
+  createEquipment(input: CreateEquipmentWithPricingInput!): Equipment!
+  createEquipmentCategory(description: String, name: String!): EquipmentCategory!
   createProject(input: CreateProjectInput!): Project!
+  createVendorPricing(equipmentId: ID!, input: CreateVendorPricingInput!): VendorPricing!
+  deleteEquipment(id: ID!): Boolean!
   deleteProject(id: ID!): Boolean!
+  deleteVendorPricing(id: ID!): Boolean!
   generateProposalDownload(id: ID!): String!
   signIn(input: SignInInput!): AuthResponse!
   signUp(input: SignUpInput!): AuthResponse!
   startProjectAnalysis(projectId: ID!): Boolean!
+  updateEquipment(input: UpdateEquipmentInput!): Equipment!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  updateVendorPricing(input: UpdateVendorPricingInput!): VendorPricing!
 }
 
 type ParcelData {
@@ -77,6 +151,11 @@ type PermitData {
   scrapedAt: DateTime!
 }
 
+input PriceRangeInput {
+  max: Float!
+  min: Float!
+}
+
 type Project {
   address: String!
   city: String!
@@ -85,6 +164,7 @@ type Project {
   name: String!
   parcelData: ParcelData
   permitData: PermitData
+  projectEquipment: [ProjectEquipment!]
   proposal: Proposal
   solarDesign: SolarDesign
   state: String!
@@ -92,6 +172,17 @@ type Project {
   updatedAt: DateTime!
   userId: String!
   zipCode: String!
+}
+
+type ProjectEquipment {
+  equipmentId: String!
+  id: ID!
+  notes: String
+  projectId: String!
+  quantity: Float!
+  totalPrice: Float!
+  unitPrice: Float!
+  vendorUsed: String
 }
 
 enum ProjectStatus {
@@ -112,6 +203,9 @@ type Proposal {
 
 type Query {
   agentTasks(projectId: ID!): [AgentTask!]!
+  equipment(filters: EquipmentFilterInput): EquipmentConnection!
+  equipmentById(id: ID!): Equipment!
+  equipmentCategories: [EquipmentCategory!]!
   me: User!
   project(id: ID!): Project
   projects: [Project!]!
@@ -152,6 +246,19 @@ enum TaskStatus {
   RETRYING
 }
 
+input UpdateEquipmentInput {
+  categoryId: String
+  description: String
+  id: ID!
+  imageUrl: String
+  isActive: Boolean
+  manufacturer: String
+  modelNumber: String
+  name: String
+  specifications: String
+  standardPrice: Float
+}
+
 input UpdateProjectInput {
   address: String
   city: String
@@ -160,10 +267,33 @@ input UpdateProjectInput {
   zipCode: String
 }
 
+input UpdateVendorPricingInput {
+  id: ID!
+  isActive: Boolean
+  notes: String
+  specialPrice: Float
+  validFrom: DateTime
+  validUntil: DateTime
+  vendorName: String
+}
+
 type User {
   createdAt: DateTime!
   email: String!
   id: ID!
   name: String
   updatedAt: DateTime!
+}
+
+type VendorPricing {
+  createdAt: DateTime!
+  equipmentId: String!
+  id: ID!
+  isActive: Boolean!
+  notes: String
+  specialPrice: Float!
+  updatedAt: DateTime!
+  validFrom: DateTime
+  validUntil: DateTime
+  vendorName: String!
 }
