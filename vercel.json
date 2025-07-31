@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "cd apps/frontend && pnpm build",
-  "outputDirectory": "apps/frontend/.next",
-  "installCommand": "pnpm install --frozen-lockfile --prod=false",
+  "rootDirectory": "apps/frontend",
+  "buildCommand": "pnpm build",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile --prod=false",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet ./apps/frontend ./packages",
   "git": {
     "deploymentEnabled": {
