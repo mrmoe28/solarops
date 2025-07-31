@@ -116,8 +116,10 @@ export const useAuthStore = create<AuthState>()(
       }),
       onRehydrateStorage: () => (state) => {
         console.log('onRehydrateStorage called, state exists:', !!state);
-        state?.setHasHydrated(true);
-        state?.setLoading(false);
+        if (state) {
+          state.setHasHydrated(true);
+          state.setLoading(false);
+        }
       },
     },
   ),

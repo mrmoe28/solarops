@@ -1,8 +1,9 @@
-import { ApolloClient, InMemoryCache, createHttpLink, split } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink, split, from } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createErrorLink, createRetryLink } from './apollo-error-link';
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql',
@@ -51,7 +52,40 @@ const splitLink =
       )
     : authLink.concat(httpLink);
 
+// Create error handling link
+const errorLink = createErrorLink();
+
+// Create retry link
+const retryLink = createRetryLink({
+  max: 3,
+  delay: 1000,
+  jitter: true,
+});
+
+// Combine all links
+const link = from([
+  errorLink,
+  retryLink,
+  splitLink,
+]);
+
 export const apolloClient = new ApolloClient({
-  link: splitLink,
-  cache: new InMemoryCache(),
+  link,
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          // Add merge functions for paginated queries if needed
+        },
+      },
+    },
+  }),
+  defaultOptions: {
+    watchQuery: {
+      errorPolicy: 'all',
+    },
+    query: {
+      errorPolicy: 'all',
+    },
+  },
 });

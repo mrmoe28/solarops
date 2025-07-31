@@ -45,6 +45,7 @@ scalar DateTime
 type Mutation {
   createProject(input: CreateProjectInput!): Project!
   deleteProject(id: ID!): Boolean!
+  generateProposalDownload(id: ID!): String!
   signIn(input: SignInInput!): AuthResponse!
   signUp(input: SignUpInput!): AuthResponse!
   startProjectAnalysis(projectId: ID!): Boolean!

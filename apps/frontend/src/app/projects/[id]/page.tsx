@@ -283,10 +283,42 @@ export default function ProjectDetailPage() {
             <CardContent>
               <Button
                 size="lg"
-                onClick={() => {
-                  // TODO: Implement actual PDF download
-                  // For now, we'll use a placeholder
-                  window.open(`/api/projects/${projectId}/proposal/download`, '_blank');
+                onClick={async () => {
+                  try {
+                    // Get the auth token from localStorage
+                    const token = localStorage.getItem('auth-token');
+                    if (!token) {
+                      alert('Please sign in to download the proposal');
+                      return;
+                    }
+
+                    // Make the download request
+                    const response = await fetch(`/api/projects/${projectId}/proposal/download`, {
+                      headers: {
+                        'Authorization': `Bearer ${token}`,
+                      },
+                    });
+
+                    if (!response.ok) {
+                      throw new Error('Failed to download proposal');
+                    }
+
+                    // Get the blob from the response
+                    const blob = await response.blob();
+                    
+                    // Create a download link
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `solar-proposal-${project.name}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                  } catch (error) {
+                    console.error('Download error:', error);
+                    alert('Failed to download proposal. Please try again.');
+                  }
                 }}
               >
                 <FileText className="mr-2 h-4 w-4" />

@@ -1,8 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+
+// Add debug logging
+if (typeof window !== 'undefined') {
+  console.log('AuthGuard component loaded');
+}
 
 const publicPaths = [
   '/auth/signin',
@@ -22,6 +27,17 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [timeoutReached, setTimeoutReached] = useState(false);
+
+  // Add timeout to prevent infinite loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log('AuthGuard - Timeout reached, forcing render');
+      setTimeoutReached(true);
+    }, 5000); // 5 second timeout
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     console.log(
@@ -53,10 +69,11 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }, [isAuthenticated, loading, pathname, router]);
 
   // Show loading state while auth is being checked
-  if (typeof window !== 'undefined' && loading) {
+  if (loading && !timeoutReached) {
+    console.log('AuthGuard - Still loading, showing loading state');
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Loading auth...</div>
+        <div className="text-lg">Loading...</div>
       </div>
     );
   }

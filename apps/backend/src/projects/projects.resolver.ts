@@ -41,4 +41,9 @@ export class ProjectsResolver {
     const result = await this.projectsService.delete(id, user.id);
     return result.count > 0;
   }
+
+  @Mutation(() => String)
+  async generateProposalDownload(@Args('id', { type: () => ID }) id: string, @CurrentUser() user: User) {
+    return this.projectsService.generateProposalDownload(id, user.id);
+  }
 }

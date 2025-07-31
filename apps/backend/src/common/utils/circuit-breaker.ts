@@ -95,10 +95,7 @@ export class CircuitBreaker {
 
   private transitionToOpen(): void {
     this.state = CircuitState.OPEN;
-    this.logger.warn(`Circuit breaker ${this.name} transitioned to OPEN state`, {
-      failureCount: this.failureCount,
-      lastFailureTime: this.lastFailureTime,
-    });
+    this.logger.warn(`Circuit breaker ${this.name} transitioned to OPEN state`, 'CircuitBreaker');
   }
 
   private transitionToHalfOpen(): void {
