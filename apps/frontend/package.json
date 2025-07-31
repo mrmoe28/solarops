@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:deps": "cd ../.. && pnpm --filter @solarops/shared build && pnpm --filter @solarops/ui build",
+    "build:vercel": "pnpm build:deps && pnpm build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
