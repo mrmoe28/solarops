@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Res, UseGuards, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Res,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
@@ -18,16 +26,16 @@ export class ProposalsController {
   ) {
     // Extract project ID from token
     const projectId = token.split('_')[1];
-    
+
     if (!projectId) {
       throw new HttpException('Invalid download token', HttpStatus.NOT_FOUND);
     }
 
     // Verify the project belongs to the user
     const project = await this.prisma.project.findFirst({
-      where: { 
-        id: projectId, 
-        userId: user.id 
+      where: {
+        id: projectId,
+        userId: user.id,
       },
       include: {
         proposal: true,
@@ -46,7 +54,10 @@ export class ProposalsController {
 
     // Set response headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="solar-proposal-${project.name}.pdf"`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="solar-proposal-${project.name}.pdf"`,
+    );
     res.setHeader('Content-Length', Buffer.byteLength(pdfContent));
 
     // Send the PDF content
@@ -56,11 +67,11 @@ export class ProposalsController {
   private generateProposalPDF(project: any): string {
     // This is a simplified PDF generation
     // In a real implementation, you'd use a library like PDFKit or Puppeteer
-    
+
     const proposal = project.proposal;
     const design = project.solarDesign;
     const parcel = project.parcelData;
-    
+
     // Create a simple text-based "PDF" for demonstration
     const content = `
 SOLAR PROPOSAL
@@ -78,13 +89,13 @@ FINANCIAL SUMMARY
 ================
 System Cost: $${proposal?.systemCost?.toLocaleString() || 'N/A'}
 Annual Savings: $${(() => {
-  try {
-    const savings = JSON.parse(proposal?.savings || '{}');
-    return savings.annual?.toLocaleString() || 'N/A';
-  } catch {
-    return 'N/A';
-  }
-})()}
+      try {
+        const savings = JSON.parse(proposal?.savings || '{}');
+        return savings.annual?.toLocaleString() || 'N/A';
+      } catch {
+        return 'N/A';
+      }
+    })()}
 Payback Period: ${proposal?.paybackPeriod || 'N/A'} years
 
 PROPERTY DETAILS
@@ -101,4 +112,4 @@ Generated on: ${new Date().toLocaleDateString()}
 
     return content;
   }
-} 
+}

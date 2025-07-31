@@ -1,15 +1,12 @@
 import { Injectable, Logger, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { Prisma, Equipment, VendorPricing, EquipmentCategory } from '@prisma/client';
+import { Prisma, EquipmentCategory } from '@prisma/client';
 import { EquipmentMapper } from './equipment.mapper';
 import {
   CreateEquipmentWithPricingInput,
   CreateVendorPricingInput,
 } from './dto/create-equipment.dto';
-import {
-  UpdateEquipmentInput,
-  UpdateVendorPricingInput,
-} from './dto/update-equipment.dto';
+import { UpdateEquipmentInput, UpdateVendorPricingInput } from './dto/update-equipment.dto';
 import { EquipmentFilterInput } from './dto/equipment-filter.dto';
 import {
   EquipmentNotFoundError,
@@ -151,7 +148,7 @@ export class EquipmentService {
       if (error.code === 'P2002') {
         throw new DuplicateEquipmentError(
           data.manufacturer || existingEquipment.manufacturer,
-          data.modelNumber || existingEquipment.modelNumber
+          data.modelNumber || existingEquipment.modelNumber,
         );
       }
       throw error;
@@ -238,10 +235,7 @@ export class EquipmentService {
           vendorPricing: {
             where: {
               isActive: true,
-              OR: [
-                { validUntil: null },
-                { validUntil: { gte: new Date() } },
-              ],
+              OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }],
             },
           },
         },
@@ -277,10 +271,7 @@ export class EquipmentService {
     return EquipmentMapper.toGraphQL(equipment);
   }
 
-  async createVendorPricing(
-    equipmentId: string,
-    data: CreateVendorPricingInput
-  ): Promise<any> {
+  async createVendorPricing(equipmentId: string, data: CreateVendorPricingInput): Promise<any> {
     // Validate equipment exists
     const equipment = await this.prisma.equipment.findUnique({
       where: { id: equipmentId },
@@ -292,9 +283,7 @@ export class EquipmentService {
 
     // Validate pricing
     if (data.specialPrice >= Number(equipment.standardPrice)) {
-      throw new InvalidPricingError(
-        'Vendor price must be lower than standard price'
-      );
+      throw new InvalidPricingError('Vendor price must be lower than standard price');
     }
 
     // Validate date range
@@ -329,19 +318,14 @@ export class EquipmentService {
     }
 
     // Validate pricing if being updated
-    if (
-      data.specialPrice &&
-      data.specialPrice >= Number(existingPricing.equipment.standardPrice)
-    ) {
-      throw new InvalidPricingError(
-        'Vendor price must be lower than standard price'
-      );
+    if (data.specialPrice && data.specialPrice >= Number(existingPricing.equipment.standardPrice)) {
+      throw new InvalidPricingError('Vendor price must be lower than standard price');
     }
 
     // Validate date range
     const validFrom = data.validFrom || existingPricing.validFrom;
     const validUntil = data.validUntil || existingPricing.validUntil;
-    
+
     if (validFrom && validUntil && validFrom >= validUntil) {
       throw new InvalidDateRangeError();
     }
@@ -403,7 +387,7 @@ export class EquipmentService {
   private validateSpecifications(specifications: string): void {
     try {
       const parsed = JSON.parse(specifications);
-      
+
       // Validate it's an object
       if (typeof parsed !== 'object' || parsed === null) {
         throw new InvalidSpecificationsError('Specifications must be a JSON object');
@@ -418,12 +402,12 @@ export class EquipmentService {
 
   private validateVendorPricing(
     vendorPricing: CreateVendorPricingInput[],
-    standardPrice: number
+    standardPrice: number,
   ): void {
     for (const pricing of vendorPricing) {
       if (pricing.specialPrice >= standardPrice) {
         throw new InvalidPricingError(
-          `Vendor price for ${pricing.vendorName} must be lower than standard price`
+          `Vendor price for ${pricing.vendorName} must be lower than standard price`,
         );
       }
 

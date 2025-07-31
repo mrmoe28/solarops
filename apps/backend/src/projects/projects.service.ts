@@ -84,12 +84,12 @@ export class ProjectsService {
 
     // Generate a unique download token
     const downloadToken = `proposal_${id}_${Date.now()}`;
-    
+
     // Store the download token in the proposal
     await this.prisma.proposal.update({
       where: { projectId: id },
-      data: { 
-        proposalUrl: `/api/proposals/download/${downloadToken}` 
+      data: {
+        proposalUrl: `/api/proposals/download/${downloadToken}`,
       },
     });
 

@@ -43,7 +43,10 @@ export class ProjectsResolver {
   }
 
   @Mutation(() => String)
-  async generateProposalDownload(@Args('id', { type: () => ID }) id: string, @CurrentUser() user: User) {
+  async generateProposalDownload(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
     return this.projectsService.generateProposalDownload(id, user.id);
   }
 }

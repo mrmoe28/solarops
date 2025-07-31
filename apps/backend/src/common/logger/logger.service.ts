@@ -23,7 +23,7 @@ export class LoggerService implements NestLoggerService {
       winston.format.json(),
       winston.format.printf((info) => {
         const { timestamp, level, message, context, correlationId, ...meta } = info;
-        
+
         const log = {
           timestamp,
           level,
@@ -76,12 +76,8 @@ export class LoggerService implements NestLoggerService {
       level: process.env.LOG_LEVEL || 'info',
       format,
       transports,
-      exceptionHandlers: [
-        new winston.transports.File({ filename: 'logs/exceptions.log' }),
-      ],
-      rejectionHandlers: [
-        new winston.transports.File({ filename: 'logs/rejections.log' }),
-      ],
+      exceptionHandlers: [new winston.transports.File({ filename: 'logs/exceptions.log' })],
+      rejectionHandlers: [new winston.transports.File({ filename: 'logs/rejections.log' })],
     });
   }
 

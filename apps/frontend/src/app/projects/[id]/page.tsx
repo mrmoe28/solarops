@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, XCircle, Loader2, FileText, Home, Sun, FileCheck } from 'lucide-react';
+import { EquipmentDetailsCard } from '@/components/equipment/equipment-details-card';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -211,33 +212,16 @@ export default function ProjectDetailPage() {
 
       {project.status === ProjectStatus.COMPLETED && (
         <>
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {project.solarDesign && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Solar System Design</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">System Size</span>
-                      <span className="font-semibold">{project.solarDesign.systemSize} kW</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Panel Count</span>
-                      <span className="font-semibold">{project.solarDesign.panelCount}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Annual Production</span>
-                      <span className="font-semibold">
-                        {project.solarDesign.annualProduction?.toLocaleString()} kWh
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+          {project.solarDesign && (
+            <div className="mb-8">
+              <EquipmentDetailsCard 
+                solarDesign={project.solarDesign} 
+                projectEquipment={project.projectEquipment}
+              />
+            </div>
+          )}
 
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
             {project.proposal && (
               <Card>
                 <CardHeader>

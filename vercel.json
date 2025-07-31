@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm build:frontend",
+  "buildCommand": "chmod +x build-vercel.sh && ./build-vercel.sh",
   "outputDirectory": "apps/frontend/.next",
   "installCommand": "pnpm install",
   "framework": "nextjs",

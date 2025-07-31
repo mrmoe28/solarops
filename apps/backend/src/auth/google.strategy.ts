@@ -8,19 +8,28 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private configService: ConfigService) {
     const clientID = configService.get('GOOGLE_CLIENT_ID');
     const clientSecret = configService.get('GOOGLE_CLIENT_SECRET');
-    
+
     // Use actual credentials if available, otherwise use dummy values
-    const finalClientID = (!clientID || clientID === 'your-google-client-id-here') ? 'dummy-client-id' : clientID;
-    const finalClientSecret = (!clientSecret || clientSecret === 'your-google-client-secret-here') ? 'dummy-client-secret' : clientSecret;
-    
+    const finalClientID =
+      !clientID || clientID === 'your-google-client-id-here' ? 'dummy-client-id' : clientID;
+    const finalClientSecret =
+      !clientSecret || clientSecret === 'your-google-client-secret-here'
+        ? 'dummy-client-secret'
+        : clientSecret;
+
     if (finalClientID === 'dummy-client-id') {
-      console.warn('⚠️  Google OAuth not configured. Run ./scripts/setup-google-oauth.sh to set up Google OAuth.');
+      console.warn(
+        '⚠️  Google OAuth not configured. Run ./scripts/setup-google-oauth.sh to set up Google OAuth.',
+      );
     }
-    
+
     super({
       clientID: finalClientID,
       clientSecret: finalClientSecret,
-      callbackURL: configService.get('GOOGLE_CALLBACK_URL', 'http://localhost:4000/auth/google/callback'),
+      callbackURL: configService.get(
+        'GOOGLE_CALLBACK_URL',
+        'http://localhost:4000/auth/google/callback',
+      ),
       scope: ['email', 'profile'],
     });
   }
@@ -34,7 +43,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     // Check if using dummy credentials
     const clientID = this.configService.get('GOOGLE_CLIENT_ID');
     if (!clientID || clientID === 'your-google-client-id-here' || clientID === 'dummy-client-id') {
-      return done(new Error('Google OAuth not configured. Please run ./scripts/setup-google-oauth.sh'), null);
+      return done(
+        new Error('Google OAuth not configured. Please run ./scripts/setup-google-oauth.sh'),
+        null,
+      );
     }
 
     const { name, emails, photos, id } = profile;

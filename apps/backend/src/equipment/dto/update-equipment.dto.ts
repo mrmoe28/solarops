@@ -1,5 +1,14 @@
 import { InputType, Field, Float, ID } from '@nestjs/graphql';
-import { IsString, IsNumber, IsOptional, IsUUID, Min, MaxLength, IsUrl, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+  Min,
+  MaxLength,
+  IsUrl,
+  IsBoolean,
+} from 'class-validator';
 
 @InputType()
 export class UpdateEquipmentInput {

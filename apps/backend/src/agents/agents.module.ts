@@ -10,7 +10,7 @@ import { QUEUE_NAMES } from '@solarops/shared';
   imports: [
     ProjectsModule,
     BullModule.registerQueue(
-      { 
+      {
         name: QUEUE_NAMES.PERMIT_OFFICE,
         defaultJobOptions: {
           attempts: 3,
@@ -22,7 +22,7 @@ import { QUEUE_NAMES } from '@solarops/shared';
           removeOnFail: false,
         },
       },
-      { 
+      {
         name: QUEUE_NAMES.PARCEL_INFO,
         defaultJobOptions: {
           attempts: 2,
@@ -34,7 +34,7 @@ import { QUEUE_NAMES } from '@solarops/shared';
           removeOnFail: false,
         },
       },
-      { 
+      {
         name: QUEUE_NAMES.OPEN_SOLAR,
         defaultJobOptions: {
           attempts: 3,
@@ -46,7 +46,7 @@ import { QUEUE_NAMES } from '@solarops/shared';
           removeOnFail: false,
         },
       },
-      { 
+      {
         name: QUEUE_NAMES.PROPOSAL,
         defaultJobOptions: {
           attempts: 5,

@@ -5,7 +5,6 @@ import { PrismaService } from '../database/prisma.service';
 import { QUEUE_NAMES, TaskStatus } from '@solarops/shared';
 import { LoggerService } from '../common/logger/logger.service';
 import { RetryHelper, defaultRetryOptions } from '../common/utils/retry.utils';
-import { ExternalServiceException } from '../common/exceptions';
 
 @Processor(QUEUE_NAMES.PERMIT_OFFICE)
 export class PermitOfficeProcessor {
@@ -19,44 +18,41 @@ export class PermitOfficeProcessor {
   async process(job: Job) {
     const { taskId, projectId } = job.data;
     const startTime = Date.now();
-    
+
     this.logger.logAgentExecution('PermitOfficeAgent', taskId, 'started');
 
     try {
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.IN_PROGRESS);
 
       // Wrap the main logic in retry helper
-      const result = await RetryHelper.withRetry(
-        async () => {
-          // Mock implementation for now
-          // In real implementation, this would call external services
-          const permitData = {
-            permitOfficeUrl: 'https://example.gov/permits',
-            permitFees: JSON.stringify({ residential: 500 }),
-            requirements: JSON.stringify(['Site plan', 'Electrical diagram']),
-          };
+      const result = await RetryHelper.withRetry(async () => {
+        // Mock implementation for now
+        // In real implementation, this would call external services
+        const permitData = {
+          permitOfficeUrl: 'https://example.gov/permits',
+          permitFees: JSON.stringify({ residential: 500 }),
+          requirements: JSON.stringify(['Site plan', 'Electrical diagram']),
+        };
 
-          // Save permit data
-          await this.prisma.permitData.create({
-            data: {
-              projectId,
-              ...permitData,
-            },
-          });
+        // Save permit data
+        await this.prisma.permitData.create({
+          data: {
+            projectId,
+            ...permitData,
+          },
+        });
 
-          return permitData;
-        },
-        defaultRetryOptions.permitOfficeAgent,
-      );
+        return permitData;
+      }, defaultRetryOptions.permitOfficeAgent);
 
       const duration = Date.now() - startTime;
       this.logger.logAgentExecution('PermitOfficeAgent', taskId, 'completed', duration);
-      
+
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.COMPLETED, result);
     } catch (error) {
       const duration = Date.now() - startTime;
       this.logger.logAgentExecution('PermitOfficeAgent', taskId, 'failed', duration, error);
-      
+
       await this.agentsService.updateTaskStatus(
         taskId,
         TaskStatus.FAILED,
@@ -78,7 +74,9 @@ export class ParcelInfoProcessor {
   @Process('process')
   async process(job: Job) {
     const { taskId, projectId } = job.data;
-    console.log(`[ParcelInfoProcessor] Starting processing for task ${taskId}, project ${projectId}`);
+    console.log(
+      `[ParcelInfoProcessor] Starting processing for task ${taskId}, project ${projectId}`,
+    );
 
     try {
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.IN_PROGRESS);
@@ -126,7 +124,9 @@ export class OpenSolarProcessor {
   @Process('process')
   async process(job: Job) {
     const { taskId, projectId } = job.data;
-    console.log(`[OpenSolarProcessor] Starting processing for task ${taskId}, project ${projectId}`);
+    console.log(
+      `[OpenSolarProcessor] Starting processing for task ${taskId}, project ${projectId}`,
+    );
 
     try {
       await this.agentsService.updateTaskStatus(taskId, TaskStatus.IN_PROGRESS);

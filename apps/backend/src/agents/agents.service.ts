@@ -19,7 +19,7 @@ export class AgentsService {
 
   async startProjectAnalysis(projectId: string) {
     console.log(`[AgentsService] Starting analysis for project ${projectId}`);
-    
+
     const project = await this.prisma.project.findUnique({
       where: { id: projectId },
     });
@@ -57,14 +57,14 @@ export class AgentsService {
       });
 
       console.log(`[AgentsService] Created task ${task.id} for agent ${agent.type}`);
-      
+
       // Add to queue
       await agent.queue.add('process', {
         taskId: task.id,
         projectId,
         input: task.input,
       });
-      
+
       console.log(`[AgentsService] Added task ${task.id} to queue ${agent.type}`);
     }
 
@@ -81,7 +81,7 @@ export class AgentsService {
 
   async updateTaskStatus(taskId: string, status: TaskStatus, output?: any, error?: string) {
     console.log(`[Agent] Updating task ${taskId} to status: ${status}`);
-    
+
     const updatedTask = await this.prisma.agentTask.update({
       where: { id: taskId },
       data: {
@@ -95,7 +95,7 @@ export class AgentsService {
     // Publish the update for real-time subscriptions
     await pubSub.publish('agentTaskUpdated', { agentTaskUpdated: updatedTask });
     console.log(`[Agent] Published update for task ${taskId}`);
-    
+
     return updatedTask;
   }
 }

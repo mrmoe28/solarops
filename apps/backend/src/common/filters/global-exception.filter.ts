@@ -43,9 +43,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const errorId = uuidv4();
 
     const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const message = this.extractMessage(exception);
     const errorResponse: ErrorResponse = {
@@ -81,7 +79,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const message = this.extractMessage(exception);
-      
+
       graphQLError = new GraphQLError(message, {
         extensions: {
           code: this.getGraphQLErrorCode(status),

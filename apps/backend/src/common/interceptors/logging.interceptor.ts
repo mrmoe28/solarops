@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoggerService } from '../logger/logger.service';
@@ -33,7 +28,7 @@ export class LoggingInterceptor implements NestInterceptor {
       if (gqlContext.getInfo()) {
         return this.handleGraphQLRequest(context, next, start, correlationId);
       }
-    } catch (error) {
+    } catch (_error) {
       // Not a GraphQL context, continue
     }
 
@@ -47,27 +42,21 @@ export class LoggingInterceptor implements NestInterceptor {
     correlationId: string,
   ): Observable<any> {
     const request = context.switchToHttp().getRequest();
-    const { method, url, body, headers } = request;
+    const { method, url, body } = request;
     const userId = request.user?.id;
 
     // Add correlation ID to request
     request.correlationId = correlationId;
 
-    this.logger.log(
-      `Incoming ${method} request to ${url}`,
-      LoggingInterceptor.name,
-    );
+    this.logger.log(`Incoming ${method} request to ${url}`, LoggingInterceptor.name);
 
     if (process.env.LOG_LEVEL === 'debug') {
-      this.logger.debug(
-        `Request body: ${JSON.stringify(body)}`,
-        LoggingInterceptor.name,
-      );
+      this.logger.debug(`Request body: ${JSON.stringify(body)}`, LoggingInterceptor.name);
     }
 
     return next.handle().pipe(
       tap({
-        next: (data) => {
+        next: (_data) => {
           const duration = Date.now() - start;
           this.logger.logRequest(method, url, userId, duration);
         },
@@ -103,28 +92,17 @@ export class LoggingInterceptor implements NestInterceptor {
     const operationType = info.operation.operation;
     const operationName = info.fieldName;
 
-    this.logger.log(
-      `GraphQL ${operationType}: ${operationName}`,
-      LoggingInterceptor.name,
-    );
+    this.logger.log(`GraphQL ${operationType}: ${operationName}`, LoggingInterceptor.name);
 
     if (process.env.LOG_LEVEL === 'debug') {
-      this.logger.debug(
-        `Variables: ${JSON.stringify(ctx.getArgs())}`,
-        LoggingInterceptor.name,
-      );
+      this.logger.debug(`Variables: ${JSON.stringify(ctx.getArgs())}`, LoggingInterceptor.name);
     }
 
     return next.handle().pipe(
       tap({
         next: () => {
           const duration = Date.now() - start;
-          this.logger.logRequest(
-            `GraphQL ${operationType}`,
-            operationName,
-            userId,
-            duration,
-          );
+          this.logger.logRequest(`GraphQL ${operationType}`, operationName, userId, duration);
         },
         error: (error) => {
           const duration = Date.now() - start;
@@ -133,12 +111,7 @@ export class LoggingInterceptor implements NestInterceptor {
             error.stack,
             LoggingInterceptor.name,
           );
-          this.logger.logRequest(
-            `GraphQL ${operationType}`,
-            operationName,
-            userId,
-            duration,
-          );
+          this.logger.logRequest(`GraphQL ${operationType}`, operationName, userId, duration);
         },
       }),
     );

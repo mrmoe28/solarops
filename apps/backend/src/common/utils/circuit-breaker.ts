@@ -34,9 +34,7 @@ export class CircuitBreaker {
       if (this.shouldAttemptReset()) {
         this.transitionToHalfOpen();
       } else {
-        throw new Error(
-          `Circuit breaker is OPEN for ${this.name}. Service is unavailable.`,
-        );
+        throw new Error(`Circuit breaker is OPEN for ${this.name}. Service is unavailable.`);
       }
     }
 
@@ -52,7 +50,7 @@ export class CircuitBreaker {
 
   private shouldAttemptReset(): boolean {
     if (!this.lastFailureTime) return false;
-    
+
     const timeSinceLastFailure = Date.now() - this.lastFailureTime.getTime();
     return timeSinceLastFailure >= this.options.resetTimeout;
   }
@@ -79,7 +77,7 @@ export class CircuitBreaker {
       this.transitionToOpen();
     } else if (this.state === CircuitState.CLOSED) {
       this.failureCount++;
-      
+
       // Calculate failure rate within monitoring period
       const monitoringDuration = Date.now() - this.monitoringStartTime;
       if (monitoringDuration > this.options.monitoringPeriod) {

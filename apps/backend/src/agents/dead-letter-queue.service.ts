@@ -56,11 +56,7 @@ export class DeadLetterQueueService {
     });
   }
 
-  private async handleDeadLetterJob(
-    queueName: string,
-    job: any,
-    error: Error,
-  ): Promise<void> {
+  private async handleDeadLetterJob(queueName: string, job: any, error: Error): Promise<void> {
     this.logger.error(
       `Job ${job.id} moved to dead letter queue after ${job.attemptsMade} attempts`,
       error.stack,
@@ -71,13 +67,13 @@ export class DeadLetterQueueService {
     // 1. Send notifications (email, Slack, etc.)
     // 2. Store in a separate database table for manual review
     // 3. Trigger alerts in monitoring systems
-    
+
     // For now, we'll just ensure the job is kept for inspection
     job.update({ deadLetter: true, deadLetterReason: error.message });
   }
 
   async getFailedJobs(queueName?: string): Promise<FailedJob[]> {
-    const queuesToCheck = queueName 
+    const queuesToCheck = queueName
       ? [this.queues.get(queueName)].filter(Boolean)
       : Array.from(this.queues.values());
 
@@ -87,7 +83,7 @@ export class DeadLetterQueueService {
       if (!queue) continue;
 
       const failedJobs = await queue.getFailed();
-      
+
       for (const job of failedJobs) {
         allFailedJobs.push({
           id: job.id.toString(),
@@ -119,7 +115,7 @@ export class DeadLetterQueueService {
 
     // Reset the job state and retry
     await job.retry();
-    
+
     this.logger.log(`Retrying failed job ${jobId} in queue ${queueName}`, 'DeadLetterQueueService');
   }
 
@@ -135,22 +131,18 @@ export class DeadLetterQueueService {
     }
 
     await job.remove();
-    
-    this.logger.log(`Removed failed job ${jobId} from queue ${queueName}`, 'DeadLetterQueueService');
+
+    this.logger.log(
+      `Removed failed job ${jobId} from queue ${queueName}`,
+      'DeadLetterQueueService',
+    );
   }
 
   async getQueueStats(): Promise<Record<string, any>> {
     const stats: Record<string, any> = {};
 
     for (const [queueName, queue] of this.queues) {
-      const [
-        waiting,
-        active,
-        completed,
-        failed,
-        delayed,
-        paused,
-      ] = await Promise.all([
+      const [waiting, active, completed, failed, delayed, paused] = await Promise.all([
         queue.getWaitingCount(),
         queue.getActiveCount(),
         queue.getCompletedCount(),
@@ -174,12 +166,12 @@ export class DeadLetterQueueService {
   }
 
   async cleanFailedJobs(olderThanDays: number = 7): Promise<number> {
-    const cutoffTime = Date.now() - (olderThanDays * 24 * 60 * 60 * 1000);
+    const cutoffTime = Date.now() - olderThanDays * 24 * 60 * 60 * 1000;
     let totalCleaned = 0;
 
     for (const [queueName, queue] of this.queues) {
       const failedJobs = await queue.getFailed();
-      
+
       for (const job of failedJobs) {
         if (job.finishedOn && job.finishedOn < cutoffTime) {
           await job.remove();

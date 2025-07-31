@@ -8,13 +8,13 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Get logger instance
   const logger = app.get(LoggerService);
 
   // Global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
-  
+
   // Global logging interceptor
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
 
@@ -25,11 +25,14 @@ async function bootstrap() {
       transform: true,
       forbidNonWhitelisted: true,
       exceptionFactory: (errors) => {
-        const formattedErrors = errors.reduce((acc, error) => {
-          acc[error.property] = Object.values(error.constraints || {});
-          return acc;
-        }, {} as Record<string, string[]>);
-        
+        const formattedErrors = errors.reduce(
+          (acc, error) => {
+            acc[error.property] = Object.values(error.constraints || {});
+            return acc;
+          },
+          {} as Record<string, string[]>,
+        );
+
         throw new ValidationException('Validation failed', formattedErrors);
       },
     }),

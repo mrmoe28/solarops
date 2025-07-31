@@ -53,8 +53,8 @@ async function seedEquipment() {
   console.log(`✅ Created ${categories.length} equipment categories`);
 
   // Create sample equipment
-  const solarPanelCategory = categories.find(c => c.name === 'Solar Panels');
-  const inverterCategory = categories.find(c => c.name === 'Inverters');
+  const solarPanelCategory = categories.find((c) => c.name === 'Solar Panels');
+  const inverterCategory = categories.find((c) => c.name === 'Inverters');
 
   if (solarPanelCategory && inverterCategory) {
     // Check if equipment already exists

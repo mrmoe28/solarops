@@ -12,10 +12,7 @@ import {
   CreateEquipmentWithPricingInput,
   CreateVendorPricingInput,
 } from './dto/create-equipment.dto';
-import {
-  UpdateEquipmentInput,
-  UpdateVendorPricingInput,
-} from './dto/update-equipment.dto';
+import { UpdateEquipmentInput, UpdateVendorPricingInput } from './dto/update-equipment.dto';
 import { EquipmentFilterInput } from './dto/equipment-filter.dto';
 
 @Resolver(() => Equipment)
@@ -26,15 +23,13 @@ export class EquipmentResolver {
   @Query(() => EquipmentConnection, { name: 'equipment' })
   async getEquipment(
     @Args('filters', { type: () => EquipmentFilterInput, nullable: true })
-    filters?: EquipmentFilterInput
+    filters?: EquipmentFilterInput,
   ): Promise<EquipmentConnection> {
     return this.equipmentService.findEquipment(filters || {});
   }
 
   @Query(() => Equipment, { name: 'equipmentById' })
-  async getEquipmentById(
-    @Args('id', { type: () => ID }) id: string
-  ): Promise<Equipment> {
+  async getEquipmentById(@Args('id', { type: () => ID }) id: string): Promise<Equipment> {
     return this.equipmentService.findEquipmentById(id);
   }
 
@@ -44,52 +39,44 @@ export class EquipmentResolver {
   }
 
   @Mutation(() => Equipment, { name: 'createEquipment' })
-  async createEquipment(
-    @Args('input') input: CreateEquipmentWithPricingInput
-  ): Promise<Equipment> {
+  async createEquipment(@Args('input') input: CreateEquipmentWithPricingInput): Promise<Equipment> {
     return this.equipmentService.createEquipment(input);
   }
 
   @Mutation(() => Equipment, { name: 'updateEquipment' })
-  async updateEquipment(
-    @Args('input') input: UpdateEquipmentInput
-  ): Promise<Equipment> {
+  async updateEquipment(@Args('input') input: UpdateEquipmentInput): Promise<Equipment> {
     return this.equipmentService.updateEquipment(input);
   }
 
   @Mutation(() => Boolean, { name: 'deleteEquipment' })
-  async deleteEquipment(
-    @Args('id', { type: () => ID }) id: string
-  ): Promise<boolean> {
+  async deleteEquipment(@Args('id', { type: () => ID }) id: string): Promise<boolean> {
     return this.equipmentService.deleteEquipment(id);
   }
 
   @Mutation(() => VendorPricing, { name: 'createVendorPricing' })
   async createVendorPricing(
     @Args('equipmentId', { type: () => ID }) equipmentId: string,
-    @Args('input') input: CreateVendorPricingInput
+    @Args('input') input: CreateVendorPricingInput,
   ): Promise<VendorPricing> {
     return this.equipmentService.createVendorPricing(equipmentId, input);
   }
 
   @Mutation(() => VendorPricing, { name: 'updateVendorPricing' })
   async updateVendorPricing(
-    @Args('input') input: UpdateVendorPricingInput
+    @Args('input') input: UpdateVendorPricingInput,
   ): Promise<VendorPricing> {
     return this.equipmentService.updateVendorPricing(input);
   }
 
   @Mutation(() => Boolean, { name: 'deleteVendorPricing' })
-  async deleteVendorPricing(
-    @Args('id', { type: () => ID }) id: string
-  ): Promise<boolean> {
+  async deleteVendorPricing(@Args('id', { type: () => ID }) id: string): Promise<boolean> {
     return this.equipmentService.deleteVendorPricing(id);
   }
 
   @Mutation(() => EquipmentCategory, { name: 'createEquipmentCategory' })
   async createEquipmentCategory(
     @Args('name') name: string,
-    @Args('description', { nullable: true }) description?: string
+    @Args('description', { nullable: true }) description?: string,
   ): Promise<EquipmentCategory> {
     return this.equipmentService.createCategory(name, description);
   }

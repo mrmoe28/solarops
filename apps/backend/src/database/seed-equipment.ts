@@ -52,9 +52,9 @@ async function seedEquipment() {
   console.log(`✅ Created ${categories.length} equipment categories`);
 
   // Create sample equipment with vendor pricing
-  const solarPanelCategory = categories.find(c => c.name === 'Solar Panels');
-  const inverterCategory = categories.find(c => c.name === 'Inverters');
-  const batteryCategory = categories.find(c => c.name === 'Batteries');
+  const solarPanelCategory = categories.find((c) => c.name === 'Solar Panels');
+  const inverterCategory = categories.find((c) => c.name === 'Inverters');
+  const batteryCategory = categories.find((c) => c.name === 'Batteries');
 
   if (solarPanelCategory && inverterCategory && batteryCategory) {
     // Solar Panels
@@ -64,7 +64,8 @@ async function seedEquipment() {
         manufacturer: 'REC',
         modelNumber: 'Alpha Pure-R 410',
         name: 'REC Alpha Pure-R 410W Solar Panel',
-        description: 'High-efficiency monocrystalline solar panel with excellent low-light performance',
+        description:
+          'High-efficiency monocrystalline solar panel with excellent low-light performance',
         specifications: {
           power: { watts: 410, efficiency: 21.9 },
           dimensions: { length: 1821, width: 1016, height: 30, unit: 'mm' },
@@ -167,13 +168,14 @@ async function seedEquipment() {
       },
     });
 
-    const smaInverter = await prisma.equipment.create({
+    await prisma.equipment.create({
       data: {
         categoryId: inverterCategory.id,
         manufacturer: 'SMA',
         modelNumber: 'SB7.7-1SP-US-41',
         name: 'SMA Sunny Boy 7.7kW String Inverter',
-        description: 'High-performance string inverter with integrated arc fault circuit interrupter',
+        description:
+          'High-performance string inverter with integrated arc fault circuit interrupter',
         specifications: {
           power: {
             ratedOutput: 7700,

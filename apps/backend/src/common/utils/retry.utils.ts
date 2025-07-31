@@ -8,10 +8,7 @@ export interface RetryOptions {
 }
 
 export class RetryHelper {
-  static async withRetry<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions,
-  ): Promise<T> {
+  static async withRetry<T>(fn: () => Promise<T>, options: RetryOptions): Promise<T> {
     const {
       maxAttempts,
       backoffMs,

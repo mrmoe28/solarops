@@ -13,7 +13,7 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req: any) {
+  async googleAuth(@Req() _req: any) {
     // Guard redirects to Google
   }
 
@@ -23,14 +23,18 @@ export class AuthController {
     try {
       // Check if Google OAuth is properly configured
       const clientID = this.configService.get('GOOGLE_CLIENT_ID');
-      if (!clientID || clientID === 'your-google-client-id-here' || clientID === 'dummy-client-id') {
+      if (
+        !clientID ||
+        clientID === 'your-google-client-id-here' ||
+        clientID === 'dummy-client-id'
+      ) {
         const frontendUrl = this.configService.get('FRONTEND_URL', 'http://localhost:3000');
         return res.redirect(`${frontendUrl}/auth/signin?error=oauth_not_configured`);
       }
 
       // req.user contains the Google profile data from the strategy
-      const { token, user } = await this.authService.validateOAuthLogin(req.user, 'GOOGLE');
-      
+      const { token } = await this.authService.validateOAuthLogin(req.user, 'GOOGLE');
+
       // Redirect to frontend with token
       const frontendUrl = this.configService.get('FRONTEND_URL', 'http://localhost:3000');
       res.redirect(`${frontendUrl}/auth/callback?token=${token}&provider=google`);
@@ -38,9 +42,11 @@ export class AuthController {
       console.error('Google OAuth callback error:', error);
       // Redirect to frontend with error
       const frontendUrl = this.configService.get('FRONTEND_URL', 'http://localhost:3000');
-      const errorMessage = (error as Error)?.message === 'Google OAuth not configured. Please run ./scripts/setup-google-oauth.sh' 
-        ? 'oauth_not_configured' 
-        : 'oauth_failed';
+      const errorMessage =
+        (error as Error)?.message ===
+        'Google OAuth not configured. Please run ./scripts/setup-google-oauth.sh'
+          ? 'oauth_not_configured'
+          : 'oauth_failed';
       res.redirect(`${frontendUrl}/auth/signin?error=${errorMessage}`);
     }
   }
