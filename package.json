@@ -4,10 +4,11 @@
   "description": "AI-powered solar project management platform",
   "private": true,
   "engines": {
-    "node": ">=18.0.0",
+    "node": "20.x",
     "pnpm": ">=8.0.0"
   },
   "scripts": {
+    "postinstall": "pnpm build:packages",
     "dev": "pnpm build:packages && pnpm --parallel -r dev",
     "dev:frontend": "pnpm --filter @solarops/frontend dev",
     "dev:backend": "pnpm --filter @solarops/backend dev",
