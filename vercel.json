@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm --filter @solarops/shared build && pnpm --filter @solarops/ui build && pnpm --filter @solarops/frontend build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": null
+}
