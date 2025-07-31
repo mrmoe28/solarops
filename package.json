@@ -14,7 +14,7 @@
     "dev:backend": "pnpm --filter backend dev",
     "build": "pnpm build:packages && pnpm -r build",
     "build:packages": "pnpm --filter './packages/*' build",
-    "build:frontend": "pnpm --filter frontend build",
+    "build:frontend": "pnpm build:packages && pnpm --filter frontend build",
     "build:backend": "pnpm --filter backend build",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",

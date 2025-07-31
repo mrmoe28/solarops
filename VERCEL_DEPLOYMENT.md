@@ -24,9 +24,9 @@ In the Vercel project settings:
 #### Build Configuration
 - **Framework Preset**: Next.js
 - **Root Directory**: `apps/frontend`
-- **Build Command**: `chmod +x build.sh && ./build.sh`
+- **Build Command**: `pnpm build:frontend`
 - **Output Directory**: `.next`
-- **Install Command**: `npm install`
+- **Install Command**: `pnpm install`
 
 #### Environment Variables
 Add the following environment variables in Vercel:

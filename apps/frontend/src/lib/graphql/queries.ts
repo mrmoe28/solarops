@@ -148,6 +148,28 @@ export const GET_PROJECT = gql`
         annualProduction
         bomList
       }
+      projectEquipment {
+        id
+        quantity
+        unitPrice
+        totalPrice
+        vendorUsed
+        notes
+        equipment {
+          id
+          manufacturer
+          modelNumber
+          name
+          description
+          specifications
+          imageUrl
+          standardPrice
+          category {
+            id
+            name
+          }
+        }
+      }
       proposal {
         systemCost
         savings
@@ -187,6 +209,69 @@ export const AGENT_TASK_UPDATED = gql`
       attempts
       createdAt
       completedAt
+    }
+  }
+`;
+
+export const EQUIPMENT_FRAGMENT = gql`
+  fragment EquipmentFields on Equipment {
+    id
+    manufacturer
+    modelNumber
+    name
+    description
+    specifications
+    imageUrl
+    standardPrice
+    isActive
+    category {
+      id
+      name
+      description
+    }
+    vendorPricing {
+      id
+      vendorName
+      specialPrice
+      validFrom
+      validUntil
+      notes
+      isActive
+    }
+    lowestVendorPrice
+  }
+`;
+
+export const GET_EQUIPMENT = gql`
+  ${EQUIPMENT_FRAGMENT}
+  query GetEquipment($filters: EquipmentFilterInput) {
+    equipment(filters: $filters) {
+      items {
+        ...EquipmentFields
+      }
+      total
+      page
+      pageSize
+      totalPages
+    }
+  }
+`;
+
+export const GET_EQUIPMENT_BY_ID = gql`
+  ${EQUIPMENT_FRAGMENT}
+  query GetEquipmentById($id: ID!) {
+    equipmentById(id: $id) {
+      ...EquipmentFields
+    }
+  }
+`;
+
+export const GET_EQUIPMENT_CATEGORIES = gql`
+  query GetEquipmentCategories {
+    equipmentCategories {
+      id
+      name
+      description
     }
   }
 `;

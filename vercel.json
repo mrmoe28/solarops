@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd apps/frontend && chmod +x build.sh && ./build.sh",
+  "buildCommand": "pnpm build:frontend",
   "outputDirectory": "apps/frontend/.next",
-  "installCommand": "npm install",
+  "installCommand": "pnpm install",
   "framework": "nextjs",
   "functions": {
     "apps/frontend/src/app/api/**/*.ts": {
