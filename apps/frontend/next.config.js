@@ -1,10 +1,12 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@solarops/shared', '@solarops/ui'],
   output: 'standalone',
   experimental: {
-    outputFileTracingRoot: undefined,
+    outputFileTracingRoot: path.join(__dirname, '../../'),
     esmExternals: 'loose',
   },
   images: {
