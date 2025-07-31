@@ -1,0 +1,168 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AgentTask {
+  agentType: AgentType!
+  attempts: Float!
+  completedAt: DateTime
+  createdAt: DateTime!
+  error: String
+  id: ID!
+  input: String
+  output: String
+  projectId: String!
+  startedAt: DateTime
+  status: TaskStatus!
+  updatedAt: DateTime!
+}
+
+enum AgentType {
+  OPEN_SOLAR
+  PARCEL_INFO
+  PERMIT_OFFICE
+  PROPOSAL
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+input CreateProjectInput {
+  address: String!
+  city: String!
+  name: String!
+  state: String!
+  zipCode: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createProject(input: CreateProjectInput!): Project!
+  deleteProject(id: ID!): Boolean!
+  signIn(input: SignInInput!): AuthResponse!
+  signUp(input: SignUpInput!): AuthResponse!
+  startProjectAnalysis(projectId: ID!): Boolean!
+  updateProject(id: ID!, input: UpdateProjectInput!): Project!
+}
+
+type ParcelData {
+  electricalPanel: String
+  fetchedAt: DateTime!
+  id: ID!
+  ownerName: String
+  parcelNumber: String
+  projectId: String!
+  propertyType: String
+  roofAge: Float
+  roofType: String
+  squareFootage: Float
+  yearBuilt: Float
+}
+
+type PermitData {
+  applicationLinks: [String!]
+  id: ID!
+  instructions: String
+  permitFees: String
+  permitOfficeUrl: String
+  projectId: String!
+  requirements: String
+  scrapedAt: DateTime!
+}
+
+type Project {
+  address: String!
+  city: String!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  parcelData: ParcelData
+  permitData: PermitData
+  proposal: Proposal
+  solarDesign: SolarDesign
+  state: String!
+  status: ProjectStatus!
+  updatedAt: DateTime!
+  userId: String!
+  zipCode: String!
+}
+
+enum ProjectStatus {
+  COMPLETED
+  FAILED
+  IN_PROGRESS
+  PENDING
+}
+
+type Proposal {
+  id: ID!
+  paybackPeriod: Float
+  projectId: String!
+  proposalUrl: String
+  savings: String
+  systemCost: Float
+}
+
+type Query {
+  agentTasks(projectId: ID!): [AgentTask!]!
+  me: User!
+  project(id: ID!): Project
+  projects: [Project!]!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+input SignUpInput {
+  email: String!
+  name: String
+  password: String!
+}
+
+type SolarDesign {
+  annualProduction: Float
+  bomList: String
+  designUrl: String
+  id: ID!
+  inverterModel: String
+  panelCount: Float!
+  panelModel: String
+  projectId: String!
+  systemSize: Float!
+}
+
+type Subscription {
+  agentTaskUpdated(projectId: ID!): AgentTask!
+}
+
+enum TaskStatus {
+  COMPLETED
+  FAILED
+  IN_PROGRESS
+  PENDING
+  RETRYING
+}
+
+input UpdateProjectInput {
+  address: String
+  city: String
+  name: String
+  state: String
+  zipCode: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String
+  updatedAt: DateTime!
+}

@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String?   // Made optional for OAuth users
+  name      String?
+  googleId  String?   @unique
+  provider  AuthProvider @default(LOCAL)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+}
+
+model Project {
+  id               String       @id @default(uuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id])
+  name             String
+  address          String
+  city             String
+  state            String
+  zipCode          String
+  status           ProjectStatus @default(PENDING)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  permitData       PermitData?
+  parcelData       ParcelData?
+  solarDesign      SolarDesign?
+  proposal         Proposal?
+  agentTasks       AgentTask[]
+}
+
+model PermitData {
+  id                String   @id @default(uuid())
+  projectId         String   @unique
+  project           Project  @relation(fields: [projectId], references: [id])
+  permitOfficeUrl   String?
+  permitFees        Json?
+  requirements      Json?
+  instructions      String?
+  applicationLinks  Json?
+  scrapedAt         DateTime @default(now())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ParcelData {
+  id               String   @id @default(uuid())
+  projectId        String   @unique
+  project          Project  @relation(fields: [projectId], references: [id])
+  parcelNumber     String?
+  ownerName        String?
+  propertyType     String?
+  yearBuilt        Int?
+  squareFootage    Int?
+  roofType         String?
+  roofAge          Int?
+  electricalPanel  String?
+  additionalInfo   Json?
+  fetchedAt        DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model SolarDesign {
+  id              String   @id @default(uuid())
+  projectId       String   @unique
+  project         Project  @relation(fields: [projectId], references: [id])
+  systemSize      Float
+  panelCount      Int
+  panelModel      String?
+  inverterModel   String?
+  annualProduction Float?
+  bomList         Json?
+  designUrl       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Proposal {
+  id          String   @id @default(uuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id])
+  proposalUrl String?
+  systemCost  Float?
+  savings     Json?
+  paybackPeriod Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AgentTask {
+  id          String      @id @default(uuid())
+  projectId   String
+  project     Project     @relation(fields: [projectId], references: [id])
+  agentType   AgentType
+  status      TaskStatus  @default(PENDING)
+  input       Json?
+  output      Json?
+  error       String?
+  attempts    Int         @default(0)
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum ProjectStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum AgentType {
+  PERMIT_OFFICE
+  PARCEL_INFO
+  OPEN_SOLAR
+  PROPOSAL
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  RETRYING
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  GITHUB
+}

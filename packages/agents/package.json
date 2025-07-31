@@ -1,0 +1,28 @@
+{
+  "name": "@solarops/agents",
+  "version": "1.0.0",
+  "description": "AI agents for SolarOps",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "lint": "eslint src/**/*.ts",
+    "typecheck": "tsc --noEmit",
+    "desktop:start": "tsx src/desktop/start.ts"
+  },
+  "dependencies": {
+    "@solarops/shared": "workspace:*",
+    "bull": "^4.12.0",
+    "openai": "^4.26.0",
+    "playwright": "^1.41.1",
+    "p-retry": "^6.2.0",
+    "axios": "^1.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}
