@@ -1,0 +1,28 @@
+{
+  "name": "vercel-app-template",
+  "version": "1.0.0",
+  "description": "Vercel-optimized monorepo template for Next.js applications",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:packages": "turbo run build --filter='./packages/*'",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "check:all": "turbo lint typecheck test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "prettier": "^3.2.5",
+    "turbo": "^1.11.3",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.1"
+}
