@@ -52,4 +52,7 @@ temp/
 
 # Docker
 .docker/
+
+# Vercel
 .vercel
+VERCEL_ENV_VALUES.txt
