@@ -67,3 +67,57 @@ apps/backend/.env.production
 apps/frontend/.env
 apps/frontend/.env.local
 apps/frontend/.env.production
+
+# Compiled files
+**/*.js
+**/*.d.ts
+**/*.d.ts.map
+!*.config.js
+!*.setup.js
+!jest.config.js
+!jest.setup.js
+!next.config.js
+!tailwind.config.js
+!postcss.config.js
+!build-vercel.sh
+!scripts/*.sh
+
+# Test files
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+jest.config.*
+jest.setup.*
+
+# Screenshots and temporary images
+*.png
+*.jpg
+*.jpeg
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+
+# Editor specific
+.cursor/
+.idea/
+.vscode/
+
+# Temporary scripts
+cursor-open.sh
+open-cursor-desktop.js
+
+# Build artifacts
+dist/
+build/
+.next/
+out/
+
+# Logs
+logs/
+*.log
+
+# Misc
+turbo.json
+env.template

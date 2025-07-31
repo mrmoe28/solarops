@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "build": "echo 'Shared package already built'",
+    "build": "tsc -p tsconfig.build.json",
     "build:force": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src/**/*.ts",

@@ -5,6 +5,7 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     outputFileTracingRoot: undefined,
+    esmExternals: 'loose',
   },
   images: {
     domains: ['localhost'],
