@@ -24,28 +24,6 @@ export class UsersService {
     });
   }
 
-  async findByGoogleId(googleId: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: { googleId },
-    });
-  }
-
-  async createOAuthUser(data: {
-    email: string;
-    googleId: string;
-    name: string;
-    provider: AuthProvider;
-  }): Promise<User> {
-    return this.prisma.user.create({
-      data: {
-        email: data.email,
-        googleId: data.googleId,
-        name: data.name,
-        provider: data.provider,
-        password: null, // OAuth users don't have passwords
-      },
-    });
-  }
 
   async update(id: string, data: Partial<User>): Promise<User> {
     return this.prisma.user.update({

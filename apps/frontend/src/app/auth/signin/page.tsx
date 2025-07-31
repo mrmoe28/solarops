@@ -27,24 +27,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { SocialLoginButtons } from '@/components/auth/social-login-buttons';
-
 export default function SignInPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuthStore();
-
-  // Check for OAuth configuration errors from URL params
-  React.useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const errorParam = urlParams.get('error');
-    
-    if (errorParam === 'oauth_not_configured') {
-      setError('Google OAuth is not configured. Please contact the administrator.');
-    } else if (errorParam === 'oauth_failed') {
-      setError('Google OAuth authentication failed. Please try again.');
-    }
-  }, []);
 
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -86,7 +72,6 @@ export default function SignInPage() {
         <CardDescription className="text-center">Sign in to your SolarOps account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SocialLoginButtons />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField

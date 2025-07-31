@@ -54,38 +54,4 @@ export class AuthService {
     return this.usersService.findById(userId);
   }
 
-  async validateOAuthLogin(profile: any, provider: AuthProvider): Promise<AuthResponse> {
-    const { email, googleId, name } = profile;
-
-    // Check if user exists with this Google ID
-    let user = await this.usersService.findByGoogleId(googleId);
-
-    if (!user) {
-      // Check if user exists with this email
-      user = await this.usersService.findByEmail(email);
-
-      if (user) {
-        // User exists with email but not linked to Google, link it
-        user = await this.usersService.update(user.id, {
-          googleId,
-          provider,
-        });
-      } else {
-        // Create new user
-        user = await this.usersService.createOAuthUser({
-          email,
-          googleId,
-          name,
-          provider,
-        });
-      }
-    }
-
-    const token = this.jwtService.sign({ userId: user.id });
-
-    return {
-      token,
-      user,
-    };
-  }
 }
