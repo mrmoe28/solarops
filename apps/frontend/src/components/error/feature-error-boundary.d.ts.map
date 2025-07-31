@@ -1,0 +1,1 @@
+{"version":3,"file":"feature-error-boundary.d.ts","sourceRoot":"","sources":["feature-error-boundary.tsx"],"names":[],"mappings":"AAEA,OAAO,KAAK,MAAM,OAAO,CAAC;AAM1B,UAAU,yBAAyB;IACjC,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAC;IAC1B,WAAW,EAAE,MAAM,CAAC;IACpB,OAAO,CAAC,EAAE,MAAM,IAAI,CAAC;CACtB;AAED,wBAAgB,oBAAoB,CAAC,EACnC,QAAQ,EACR,WAAW,EACX,OAAO,EACR,EAAE,yBAAyB,qBAsD3B"}
