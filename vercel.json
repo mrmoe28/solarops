@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && pnpm build:frontend",
-  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build:frontend",
+  "installCommand": "pnpm install --frozen-lockfile",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet ./apps/frontend ./packages"
 }
