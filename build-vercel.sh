@@ -4,7 +4,7 @@
 set -e
 
 echo "Installing dependencies..."
-pnpm install
+pnpm install --shamefully-hoist
 
 echo "Building shared package first..."
 pnpm --filter shared build

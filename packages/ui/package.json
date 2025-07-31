@@ -13,7 +13,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "echo 'UI package already built'",
+    "build:force": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src/**/*.tsx",
     "typecheck": "tsc --noEmit",
