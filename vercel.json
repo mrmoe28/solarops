@@ -10,10 +10,5 @@
       "main": true
     }
   },
-  "functions": {
-    "apps/frontend/src/app/api/**/*": {
-      "maxDuration": 10
-    }
-  },
   "regions": ["iad1"]
 }
